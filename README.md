@@ -1,13 +1,13 @@
 # MsgPack for Dart
 
-A full-featured MsgPack library for Dart.
+A full-featured MsgPack library for Dart 1.x and 2.x.
 
 ## Attribution
 
-This package was forked from [msgpack](https://pub.dartlang.org/packages/msgpack)
-this release provides support for Dart 2. As well it contains a major refactoring which
-should help with performance in many places (see [benchmarks](benchmarks.md)), as well
-as a more complete testing suite.
+This package was originally forked from [msgpack](https://pub.dartlang.org/packages/msgpack). Due to the number of 
+incompatible refactorings and loss of backwards compatibility, the decision was made to spin it off as a new package.
+This package contains numerous enhancements over the original MsgPack implementation which should help with performance
+in many places (see [benchmarks](benchmarks.md)), as well as a more complete testing suite.
 
 ## Usage
 
