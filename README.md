@@ -1,4 +1,5 @@
 # MsgPack for Dart
+[![Build Status](https://travis-ci.org/butlermatt/msgpack2.svg?branch=master)](https://travis-ci.org/butlermatt/msgpack2)
 
 A full-featured MsgPack library for Dart 1.x and 2.x.
 

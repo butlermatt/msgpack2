@@ -371,9 +371,10 @@ void packSmallDateTime() {
   var date = ExtTimeStamp(DateTime.fromMillisecondsSinceEpoch(0, isUtc: true));
   List<int> encoded = serialize(date);
   expect(encoded, orderedEquals([0xd7, 0xff, 0, 0, 0, 0, 0, 0, 0, 0]));
-  date = ExtTimeStamp(DateTime(2018, 8, 21, 21, 56, 56, 200));
+  date = ExtTimeStamp(DateTime.utc(2018, 8, 21, 21, 56, 56, 200));
   encoded = serialize(date);
-  expect(encoded, orderedEquals([0xd7, 0xff, 47, 175, 8, 0, 91, 124, 180, 16]));
+  expect(
+      encoded, orderedEquals([0xd7, 0xff, 47, 175, 8, 0, 91, 124, 137, 224]));
 }
 
 void packPastDate() {
