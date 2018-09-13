@@ -4,3 +4,6 @@ dart:
 dart_task:
   - test
   - dartanalyzer: --fatal-warnings lib
+branches:
+  only:
+  - v1
