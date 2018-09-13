@@ -17,7 +17,7 @@ class Example implements ExtensionFormat {
     // Must unpack in same order as packing.
     var dt = decoder.decode();
     var nm = decoder.decode();
-    return Example(dt, nm);
+    return new Example(dt, nm);
   }
 
   String toString() => '#$number - $data';
@@ -46,26 +46,26 @@ class ExampleBuilder implements ExtensionFormat {
     var data = decoder.decode();
     var number = decoder.decode();
 
-    return OtherExample(data, number);
+    return new OtherExample(data, number);
   }
 
   String toString() => 'You Should never see this';
 }
 
 void main() {
-  var example1 = Example("The first example", 10000);
+  var example1 = new Example("The first example", 10000);
   registerExtension(example1);
   var encoded = serialize(example1);
   print('Encoded data: $encoded');
   var decoded = deserialize(encoded);
   print('Decoded data: $decoded');
 
-  var example2 = OtherExample('Second example', 2);
+  var example2 = new OtherExample('Second example', 2);
   // We don't need to supply example data in the builder when registering.
-  var builder = ExampleBuilder(null);
+  var builder = new ExampleBuilder(null);
   registerExtension(builder);
   // We must wrap the type in the builder when packing.
-  encoded = serialize(ExampleBuilder(example2));
+  encoded = serialize(new ExampleBuilder(example2));
   print('Encoded data: $encoded');
   decoded = deserialize(encoded);
   print('Decoded data: $decoded');

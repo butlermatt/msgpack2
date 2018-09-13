@@ -1,12 +1,12 @@
 name: msgpack2
 description: MsgPack for Dart
-version: 2.0.0
+version: 1.0.0
 authors:
 - Kenneth Endfinger <kaendfinger@gmail.com>
 - Dan Ellis <dan@danellis.me>
 - Matthew Butler <butler.matthew@gmail.com>
 homepage: https://github.com/butlermatt/msgpack2
 environment:
-  sdk: ">=2.0.0 <3.0.0"
+  sdk: ">=1.13.0 <2.0.0"
 dev_dependencies:
-  test: ^1.3.0
+  test: ^0.12.0

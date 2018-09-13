@@ -30,10 +30,10 @@ class Fraction {
 main(List<String> args) async {
   print("Warming Up...");
   for (var i = 0; i < TIMES; i++) {
-    var jsonStr = json.encode({"hello": "world"});
+    var jsonStr = JSON.encode({"hello": "world"});
     var newPacked = serialize({"hello": "world"});
 
-    json.decode(jsonStr);
+    JSON.decode(jsonStr);
     deserialize(newPacked);
   }
 
@@ -43,7 +43,7 @@ main(List<String> args) async {
       numbers.add(i);
     }
 
-    var jsonBytes = utf8.encode(json.encode(numbers)).length;
+    var jsonBytes = UTF8.encode(JSON.encode(numbers)).length;
     var msgpackBytes = serialize(numbers).length;
     var fract = new Fraction(jsonBytes, msgpackBytes);
     fract = fract.reduce();
@@ -155,7 +155,7 @@ testObjectDecode(String desc, input, bool markdown) {
   } else {
     print("${desc}:");
   }
-  var packedJson = json.encode(input);
+  var packedJson = JSON.encode(input);
   var newPacked = serialize(input);
 
   var watch = new Stopwatch();
@@ -163,7 +163,7 @@ testObjectDecode(String desc, input, bool markdown) {
   for (var i = 1; i <= TIMES; i++) {
     watch.reset();
     watch.start();
-    json.decode(packedJson);
+    JSON.decode(packedJson);
     watch.stop();
     times.add(watch.elapsedMicroseconds);
   }
@@ -248,11 +248,11 @@ testObjectEncode(String desc, input, bool markdown) {
   var watch = new Stopwatch();
   var times = [];
 
-  int size = utf8.encode(json.encode(input)).length;
+  int size = UTF8.encode(JSON.encode(input)).length;
   for (var i = 1; i <= TIMES; i++) {
     watch.reset();
     watch.start();
-    json.encode(input);
+    JSON.encode(input);
     watch.stop();
     times.add(watch.elapsedMicroseconds);
   }

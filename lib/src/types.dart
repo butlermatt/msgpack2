@@ -16,14 +16,14 @@ abstract class MsgType {
 class IntType implements MsgType {
   final int value;
 
-  static const IntType Uint8 = IntType._(0xcc);
-  static const IntType Uint16 = IntType._(0xcd);
-  static const IntType Uint32 = IntType._(0xce);
-  static const IntType Uint64 = IntType._(0xcf);
-  static const IntType Int8 = IntType._(0xd0);
-  static const IntType Int16 = IntType._(0xd1);
-  static const IntType Int32 = IntType._(0xd2);
-  static const IntType Int64 = IntType._(0xd3);
+  static const IntType Uint8 = const IntType._(0xcc);
+  static const IntType Uint16 = const IntType._(0xcd);
+  static const IntType Uint32 = const IntType._(0xce);
+  static const IntType Uint64 = const IntType._(0xcf);
+  static const IntType Int8 = const IntType._(0xd0);
+  static const IntType Int16 = const IntType._(0xd1);
+  static const IntType Int32 = const IntType._(0xd2);
+  static const IntType Int64 = const IntType._(0xd3);
 
   const IntType._(this.value);
 
@@ -36,15 +36,15 @@ class IntType implements MsgType {
     if (value == Int16.value) return Int16;
     if (value == Int32.value) return Int32;
     if (value == Int64.value) return Int64;
-    throw ArgumentError('Invalid IntType: 0x${value.toRadixString(16)}');
+    throw new ArgumentError('Invalid IntType: 0x${value.toRadixString(16)}');
   }
 }
 
 class FloatType implements MsgType {
   final int value;
 
-  static const FloatType Float32 = FloatType._(0xca);
-  static const FloatType Float64 = FloatType._(0xcb);
+  static const FloatType Float32 = const FloatType._(0xca);
+  static const FloatType Float64 = const FloatType._(0xcb);
 
   const FloatType._(this.value);
 
@@ -52,17 +52,17 @@ class FloatType implements MsgType {
     if (value == Float32.value) return Float32;
     if (value == Float64.value) return Float64;
 
-    throw ArgumentError('Invalid FloatType 0x${value.toRadixString(16)}');
+    throw new ArgumentError('Invalid FloatType 0x${value.toRadixString(16)}');
   }
 }
 
 class StringType implements MsgType {
   final int value;
 
-  static const StringType FixStr = StringType._(0xa0);
-  static const StringType Str8 = StringType._(0xd9);
-  static const StringType Str16 = StringType._(0xda);
-  static const StringType Str32 = StringType._(0xdb);
+  static const StringType FixStr = const StringType._(0xa0);
+  static const StringType Str8 = const StringType._(0xd9);
+  static const StringType Str16 = const StringType._(0xda);
+  static const StringType Str32 = const StringType._(0xdb);
 
   const StringType._(this.value);
 
@@ -71,16 +71,16 @@ class StringType implements MsgType {
     if (value == Str8.value) return Str8;
     if (value == Str16.value) return Str16;
     if (value == Str32.value) return Str32;
-    throw ArgumentError('Invalid StringType 0x${value.toRadixString(16)}');
+    throw new ArgumentError('Invalid StringType 0x${value.toRadixString(16)}');
   }
 }
 
 class BinaryType implements MsgType {
   final int value;
 
-  static const BinaryType Bin8 = BinaryType._(0xc4);
-  static const BinaryType Bin16 = BinaryType._(0xc5);
-  static const BinaryType Bin32 = BinaryType._(0xc6);
+  static const BinaryType Bin8 = const BinaryType._(0xc4);
+  static const BinaryType Bin16 = const BinaryType._(0xc5);
+  static const BinaryType Bin32 = const BinaryType._(0xc6);
 
   const BinaryType._(this.value);
 
@@ -89,16 +89,16 @@ class BinaryType implements MsgType {
     if (value == Bin16.value) return Bin16;
     if (value == Bin32.value) return Bin32;
 
-    throw ArgumentError('Invalid BinaryType 0x${value.toRadixString(16)}');
+    throw new ArgumentError('Invalid BinaryType 0x${value.toRadixString(16)}');
   }
 }
 
 class ArrayType implements MsgType {
   final int value;
 
-  static const ArrayType FixArray = ArrayType._(0x90);
-  static const ArrayType Array16 = ArrayType._(0xdc);
-  static const ArrayType Array32 = ArrayType._(0xdd);
+  static const ArrayType FixArray = const ArrayType._(0x90);
+  static const ArrayType Array16 = const ArrayType._(0xdc);
+  static const ArrayType Array32 = const ArrayType._(0xdd);
 
   const ArrayType._(this.value);
 
@@ -107,16 +107,16 @@ class ArrayType implements MsgType {
     if (value == Array16.value) return Array16;
     if (value == Array32.value) return Array32;
 
-    throw ArgumentError('Invalid ArrayType 0x${value.toRadixString(16)}');
+    throw new ArgumentError('Invalid ArrayType 0x${value.toRadixString(16)}');
   }
 }
 
 class MapType implements MsgType {
   final int value;
 
-  static const MapType FixMap = MapType._(0x80);
-  static const MapType Map16 = MapType._(0xde);
-  static const MapType Map32 = MapType._(0xdf);
+  static const MapType FixMap = const MapType._(0x80);
+  static const MapType Map16 = const MapType._(0xde);
+  static const MapType Map32 = const MapType._(0xdf);
 
   const MapType._(this.value);
 
@@ -125,21 +125,21 @@ class MapType implements MsgType {
     if (value == Map16.value) return Map16;
     if (value == Map32.value) return Map32;
 
-    throw ArgumentError('Invalid MapType 0x${value.toRadixString(16)}');
+    throw new ArgumentError('Invalid MapType 0x${value.toRadixString(16)}');
   }
 }
 
 class ExtType implements MsgType {
   final int value;
 
-  static const ExtType FixExt1 = ExtType._(0xd4);
-  static const ExtType FixExt2 = ExtType._(0xd5);
-  static const ExtType FixExt4 = ExtType._(0xd6);
-  static const ExtType FixExt8 = ExtType._(0xd7);
-  static const ExtType FixExt16 = ExtType._(0xd8);
-  static const ExtType Ext8 = ExtType._(0xc7);
-  static const ExtType Ext16 = ExtType._(0xc8);
-  static const ExtType Ext32 = ExtType._(0xc9);
+  static const ExtType FixExt1 = const ExtType._(0xd4);
+  static const ExtType FixExt2 = const ExtType._(0xd5);
+  static const ExtType FixExt4 = const ExtType._(0xd6);
+  static const ExtType FixExt8 = const ExtType._(0xd7);
+  static const ExtType FixExt16 = const ExtType._(0xd8);
+  static const ExtType Ext8 = const ExtType._(0xc7);
+  static const ExtType Ext16 = const ExtType._(0xc8);
+  static const ExtType Ext32 = const ExtType._(0xc9);
 
   const ExtType._(this.value);
 
@@ -153,6 +153,6 @@ class ExtType implements MsgType {
     if (value == Ext16.value) return Ext16;
     if (value == Ext32.value) return Ext32;
 
-    throw ArgumentError('Invalid ExtType 0x${value.toRadixString(16)}');
+    throw new ArgumentError('Invalid ExtType 0x${value.toRadixString(16)}');
   }
 }

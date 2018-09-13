@@ -22,7 +22,7 @@ abstract class ExtensionFormat {
 }
 
 Map<int, ExtensionFormat> _extCache = <int, ExtensionFormat>{
-  -1: ExtTimeStamp(null)
+  -1: new ExtTimeStamp(null)
 };
 
 /// Register a type for the ExtensionFormat. Type [T] must implement the
@@ -32,12 +32,12 @@ Map<int, ExtensionFormat> _extCache = <int, ExtensionFormat>{
 /// Throws a StateError if `obj.typeId` is already registered.
 void registerExtension<T extends ExtensionFormat>(T obj) {
   if (obj.typeId < 0 || obj.typeId > 127) {
-    throw ArgumentError.value(
+    throw new ArgumentError.value(
         obj.typeId, "typeId", "typeId must be between 0 and 127");
   }
 
   if (_extCache.containsKey(obj.typeId)) {
-    throw StateError('Type ID: ${obj.typeId} is already registered.');
+    throw new StateError('Type ID: ${obj.typeId} is already registered.');
   }
   _extCache[obj.typeId] = obj;
 }
@@ -85,7 +85,7 @@ class ExtTimeStamp implements ExtensionFormat {
     int nsec;
     if (decoder.list.lengthInBytes == 4) {
       sec = decoder.decodeInt(IntType.Uint32);
-      return DateTime.fromMillisecondsSinceEpoch(sec * 1000);
+      return new DateTime.fromMillisecondsSinceEpoch(sec * 1000);
     }
 
     if (decoder.list.lengthInBytes == 8) {
@@ -101,6 +101,6 @@ class ExtTimeStamp implements ExtensionFormat {
     nsec ~/= 1000 * 1000;
     if (sec < 0) nsec = -nsec;
     var ms = (sec + nsec) * 1000 + nsec;
-    return DateTime.fromMillisecondsSinceEpoch(ms);
+    return new DateTime.fromMillisecondsSinceEpoch(ms);
   }
 }

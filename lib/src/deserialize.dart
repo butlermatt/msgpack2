@@ -11,13 +11,13 @@ dynamic deserialize(dynamic input) {
   if (input is TypedData) {
     buffer = input.buffer.asUint8List(input.offsetInBytes);
   } else if (input is List<int>) {
-    buffer = Uint8List.fromList(input);
+    buffer = new Uint8List.fromList(input);
   } else {
-    throw ArgumentError.value(input, "input", "Not a byte source");
+    throw new ArgumentError.value(input, "input", "Not a byte source");
   }
 
   if (_uInt8Unpacker == null) {
-    _uInt8Unpacker = Uint8Decoder(buffer);
+    _uInt8Unpacker = new Uint8Decoder(buffer);
   } else {
     _uInt8Unpacker.reset(buffer);
   }
@@ -42,14 +42,14 @@ class Uint8Decoder {
   /// This creates a new instance of the deserializer initialized with the
   /// specified [Uint8List].
   Uint8Decoder(this.list) {
-    _bd = ByteData.view(list.buffer, list.offsetInBytes);
+    _bd = new ByteData.view(list.buffer, list.offsetInBytes);
   }
 
   /// This method will replace the existing buffer and reinitialize the
   /// deserializer with the provided [Uint8List].
   void reset(Uint8List buff) {
     list = buff;
-    _bd = ByteData.view(list.buffer, list.offsetInBytes);
+    _bd = new ByteData.view(list.buffer, list.offsetInBytes);
     _offset = 0;
   }
 
@@ -70,17 +70,17 @@ class Uint8Decoder {
     // Fix Map
     if (type <= 0x8f) {
       _offset -= 1; // Step back to get the offset correct
-      return decodeMap(MapType(type));
+      return decodeMap(new MapType(type));
     }
     // Fix List (array)
     if (type <= 0x9f) {
       _offset -= 1;
-      return decodeArray(ArrayType(type));
+      return decodeArray(new ArrayType(type));
     }
     // Fix String
     if (type <= 0xbf) {
       _offset -= 1;
-      return decodeString(StringType(type));
+      return decodeString(new StringType(type));
     }
     // Fix Null
     if (type == 0xc0) return null;
@@ -90,17 +90,17 @@ class Uint8Decoder {
     if (type == 0xc3) return true;
 
     // Binary data
-    if (type <= 0xc6) return decodeBinary(BinaryType(type));
-    if (type <= 0xc9) return decodeExtension(ExtType(type));
+    if (type <= 0xc6) return decodeBinary(new BinaryType(type));
+    if (type <= 0xc9) return decodeExtension(new ExtType(type));
     if (type == 0xca) return decodeFloat();
     if (type == 0xcb) return decodeDouble();
-    if (type <= 0xd3) return decodeInt(IntType(type));
-    if (type <= 0xd8) return decodeExtension(ExtType(type));
-    if (type <= 0xdb) return decodeString(StringType(type));
-    if (type <= 0xdd) return decodeArray(ArrayType(type));
-    if (type <= 0xdf) return decodeMap(MapType(type));
+    if (type <= 0xd3) return decodeInt(new IntType(type));
+    if (type <= 0xd8) return decodeExtension(new ExtType(type));
+    if (type <= 0xdb) return decodeString(new StringType(type));
+    if (type <= 0xdd) return decodeArray(new ArrayType(type));
+    if (type <= 0xdf) return decodeMap(new MapType(type));
 
-    throw ArgumentError('Unknown MsgPack type 0x${type.toRadixString(16)}');
+    throw new ArgumentError('Unknown MsgPack type 0x${type.toRadixString(16)}');
   }
 
   /// This method will unpack a [BinaryType] from the MsgPack format. The
@@ -123,7 +123,7 @@ class Uint8Decoder {
         break;
     }
 
-    var result = ByteData.view(list.buffer, _offset, count);
+    var result = new ByteData.view(list.buffer, _offset, count);
     _offset += count;
     return result;
   }
@@ -212,13 +212,13 @@ class Uint8Decoder {
       var typeId = _bd.getInt8(_offset++);
       builder = _extCache[typeId];
       if (builder == null) {
-        throw StateError('No registered builder for type id: $typeId');
+        throw new StateError('No registered builder for type id: $typeId');
       }
     } else {
       var typeId = _bd.getInt8(_offset++);
       builder = _extCache[typeId];
       if (builder == null) {
-        throw StateError('No registered builder for type id: $typeId');
+        throw new StateError('No registered builder for type id: $typeId');
       }
 
       switch (type) {
@@ -239,7 +239,7 @@ class Uint8Decoder {
           break;
       }
     }
-    var unpacker = Uint8Decoder(
+    var unpacker = new Uint8Decoder(
         list.buffer.asUint8List(list.offsetInBytes + _offset, length));
     var value = builder.decode(unpacker);
     _offset += length;
@@ -295,7 +295,7 @@ class Uint8Decoder {
         break;
     }
 
-    List value = List(count);
+    List value = new List(count);
     for (var i = 0; i < count; i++) {
       value[i] = decode();
     }
@@ -323,7 +323,7 @@ class Uint8Decoder {
         break;
     }
 
-    Map value = Map();
+    Map value = new Map();
     for (var i = 0; i < count; i++) {
       value[decode()] = decode();
     }

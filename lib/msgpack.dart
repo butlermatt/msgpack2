@@ -38,8 +38,8 @@ class StringCache {
 
 Uint8List _toUTF8(String str) {
   if (str.codeUnits.any((int c) => c >= 128)) {
-    return Uint8List.fromList(const Utf8Codec().encode(str));
+    return new Uint8List.fromList(const Utf8Codec().encode(str));
   }
 
-  return Uint8List.fromList(str.codeUnits);
+  return new Uint8List.fromList(str.codeUnits);
 }

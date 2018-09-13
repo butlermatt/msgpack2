@@ -53,7 +53,7 @@ class TestExtension implements ExtensionFormat {
     var b = unpacker.decode();
     var c = unpacker.decode();
 
-    return TestExtension(a, b, c);
+    return new TestExtension(a, b, c);
   }
 }
 
@@ -80,7 +80,7 @@ class OuterExtension implements ExtensionFormat {
     var c = unpacker.decode();
     var d = unpacker.decode();
 
-    return OuterExtension(a, b, c, d);
+    return new OuterExtension(a, b, c, d);
   }
 }
 
@@ -177,7 +177,7 @@ void main() {
 
 // Test packing
 void testPartialPacking() {
-  var packer = Uint8Encoder(Uint8List(2));
+  var packer = new Uint8Encoder(new Uint8List(2));
   packer.encode(32768);
   var encoded = packer.done();
   expect(encoded, orderedEquals([205, 128, 0]));
@@ -249,7 +249,7 @@ void packInt64() {
 }
 
 void packFloat32() {
-  List<int> encoded = serialize(Float(3.14));
+  List<int> encoded = serialize(new Float(3.14));
   expect(encoded, orderedEquals([202, 64, 72, 245, 195]));
 }
 
@@ -304,24 +304,24 @@ void packString256() {
 }
 
 void packBin8() {
-  var data = Uint8List.fromList(List.filled(32, 65));
-  List<int> encoded = serialize(ByteData.view(data.buffer));
+  var data = new Uint8List.fromList(new List.filled(32, 65));
+  List<int> encoded = serialize(new ByteData.view(data.buffer));
   expect(encoded.length, equals(34));
   expect(encoded.getRange(0, 2), orderedEquals([BinaryType.Bin8.value, 32]));
   expect(encoded.getRange(2, encoded.length), orderedEquals(data));
 }
 
 void packBin16() {
-  var data = Uint8List.fromList(List.filled(256, 65));
-  List<int> encoded = serialize(ByteData.view(data.buffer));
+  var data = new Uint8List.fromList(new List.filled(256, 65));
+  List<int> encoded = serialize(new ByteData.view(data.buffer));
   expect(encoded.length, equals(256 + 3));
   expect(encoded.getRange(0, 3), orderedEquals([BinaryType.Bin16.value, 1, 0]));
   expect(encoded.getRange(3, encoded.length), orderedEquals(data));
 }
 
 void packBin32() {
-  var data = Uint8List.fromList(List.filled(65536, 65));
-  List<int> encoded = serialize(ByteData.view(data.buffer));
+  var data = new Uint8List.fromList(new List.filled(65536, 65));
+  List<int> encoded = serialize(new ByteData.view(data.buffer));
   expect(encoded.length, equals(65536 + 5));
   expect(encoded.getRange(0, 5),
       orderedEquals([BinaryType.Bin32.value, 0, 1, 0, 0]));
@@ -329,8 +329,8 @@ void packBin32() {
 }
 
 void packBinOffset() {
-  var data = Uint8List.fromList(List.filled(32, 65));
-  List<int> encoded = serialize(ByteData.view(data.buffer, 8));
+  var data = new Uint8List.fromList(new List.filled(32, 65));
+  List<int> encoded = serialize(new ByteData.view(data.buffer, 8));
   expect(encoded.length, equals(26));
   expect(encoded.getRange(0, 2), orderedEquals([BinaryType.Bin8.value, 24]));
   expect(encoded.getRange(2, encoded.length),
@@ -368,17 +368,17 @@ void packIntToStringMap() {
 
 void packSmallDateTime() {
   // Epoch time because why not? It should be all 0's.
-  var date = ExtTimeStamp(DateTime.fromMillisecondsSinceEpoch(0, isUtc: true));
+  var date = new ExtTimeStamp(new DateTime.fromMillisecondsSinceEpoch(0, isUtc: true));
   List<int> encoded = serialize(date);
   expect(encoded, orderedEquals([0xd7, 0xff, 0, 0, 0, 0, 0, 0, 0, 0]));
-  date = ExtTimeStamp(DateTime.utc(2018, 8, 21, 21, 56, 56, 200));
+  date = new ExtTimeStamp(new DateTime.utc(2018, 8, 21, 21, 56, 56, 200));
   encoded = serialize(date);
   expect(
       encoded, orderedEquals([0xd7, 0xff, 47, 175, 8, 0, 91, 124, 137, 224]));
 }
 
 void packPastDate() {
-  var date = ExtTimeStamp(DateTime.utc(1932, 2, 23, 21, 53, 45, 500));
+  var date = new ExtTimeStamp(new DateTime.utc(1932, 2, 23, 21, 53, 45, 500));
   List<int> encoded = serialize(date);
   expect(
       encoded,
@@ -399,7 +399,7 @@ void packPastDate() {
         65,
         94
       ]));
-  var date2 = DateTime.utc(1969, 12, 31, 19, 30);
+  var date2 = new DateTime.utc(1969, 12, 31, 19, 30);
   // Tests "negative near epoch", plus raw date/time rather than wrapping in
   // ExtTimeStamp.
   encoded = serialize(date2);
@@ -466,13 +466,13 @@ void unpackNull() {
 }
 
 void unpackFalse() {
-  Uint8List data = Uint8List.fromList([0xc2]);
+  Uint8List data = new Uint8List.fromList([0xc2]);
   var value = deserialize(data);
   expect(value, isFalse);
 }
 
 void unpackTrue() {
-  Uint8List data = Uint8List.fromList([0xc3]);
+  Uint8List data = new Uint8List.fromList([0xc3]);
   var value = deserialize(data);
   expect(value, isTrue);
 }
@@ -516,35 +516,35 @@ void unpackString22() {
 }
 
 void unpackPositiveFixInt() {
-  Uint8List data = Uint8List.fromList([1]);
+  Uint8List data = new Uint8List.fromList([1]);
   var value = deserialize(data);
   expect(value, isInt);
   expect(value, equals(1));
 }
 
 void unpackNegativeFixInt() {
-  Uint8List data = Uint8List.fromList([240]);
+  Uint8List data = new Uint8List.fromList([240]);
   var value = deserialize(data);
   expect(value, isInt);
   expect(value, equals(-16));
 }
 
 void unpackUint8() {
-  Uint8List data = Uint8List.fromList([204, 128]);
+  Uint8List data = new Uint8List.fromList([204, 128]);
   var value = deserialize(data);
   expect(value, isInt);
   expect(value, equals(128));
 }
 
 void unpackUint16() {
-  Uint8List data = Uint8List.fromList([205, 128, 0]);
+  Uint8List data = new Uint8List.fromList([205, 128, 0]);
   var value = deserialize(data);
   expect(value, isInt);
   expect(value, equals(32768));
 }
 
 void unpackUint32() {
-  Uint8List data = Uint8List.fromList([206, 128, 0, 0, 0]);
+  Uint8List data = new Uint8List.fromList([206, 128, 0, 0, 0]);
   var value = deserialize(data);
   expect(value, isInt);
   expect(value, equals(2147483648));
@@ -553,48 +553,48 @@ void unpackUint32() {
 void unpackUint64() {
   // Dart 2 doesn't support true Uint64 without using BigInt
   Uint8List data =
-      Uint8List.fromList([207, 127, 255, 255, 255, 255, 255, 255, 255]);
+      new Uint8List.fromList([207, 127, 255, 255, 255, 255, 255, 255, 255]);
   var value = deserialize(data);
   expect(value, isInt);
   expect(value, equals(9223372036854775807));
 }
 
 void unpackInt8() {
-  Uint8List data = Uint8List.fromList([208, 128]);
+  Uint8List data = new Uint8List.fromList([208, 128]);
   var value = deserialize(data);
   expect(value, isInt);
   expect(value, equals(-128));
 }
 
 void unpackInt16() {
-  Uint8List data = Uint8List.fromList([209, 128, 0]);
+  Uint8List data = new Uint8List.fromList([209, 128, 0]);
   var value = deserialize(data);
   expect(value, isInt);
   expect(value, equals(-32768));
 }
 
 void unpackInt32() {
-  Uint8List data = Uint8List.fromList([210, 128, 0, 0, 0]);
+  Uint8List data = new Uint8List.fromList([210, 128, 0, 0, 0]);
   var value = deserialize(data);
   expect(value, isInt);
   expect(value, equals(-2147483648));
 }
 
 void unpackInt64() {
-  Uint8List data = Uint8List.fromList([211, 128, 0, 0, 0, 0, 0, 0, 0]);
+  Uint8List data = new Uint8List.fromList([211, 128, 0, 0, 0, 0, 0, 0, 0]);
   var value = deserialize(data);
   expect(value, isInt);
   expect(value, equals(-9223372036854775808));
 }
 
 void unpackFloat32() {
-  Uint8List data = Uint8List.fromList([202, 64, 72, 245, 195]);
+  Uint8List data = new Uint8List.fromList([202, 64, 72, 245, 195]);
   var value = deserialize(data);
   expect((value as double).toStringAsPrecision(3), equals('3.14'));
 }
 
 void unpackDouble() {
-  Uint8List data = Uint8List.fromList(
+  Uint8List data = new Uint8List.fromList(
       [0xcb, 0x40, 0x09, 0x1e, 0xb8, 0x51, 0xeb, 0x85, 0x1f]);
   var value = deserialize(data);
   expect(value, equals(3.14));
@@ -646,11 +646,11 @@ void unpackIntToStringMap() {
 void unpackSmallDateTime() {
   var data = <int>[0xd7, 0xff, 0, 0, 0, 0, 0, 0, 0, 0];
   var value = deserialize(data);
-  expect(value, equals(DateTime.fromMillisecondsSinceEpoch(0)));
+  expect(value, equals(new DateTime.fromMillisecondsSinceEpoch(0)));
   data = <int>[0xd7, 0xff, 47, 175, 8, 0, 91, 124, 180, 16];
   value = deserialize(data);
   expect((value as DateTime).toUtc(),
-      equals(DateTime.utc(2018, 8, 22, 0, 56, 56, 200)));
+      equals(new DateTime.utc(2018, 8, 22, 0, 56, 56, 200)));
 }
 
 void unpackPastDate() {
@@ -673,7 +673,7 @@ void unpackPastDate() {
   ];
 
   var value = deserialize(data) as DateTime;
-  expect(value.toUtc(), equals(DateTime.utc(1932, 2, 24, 1, 53, 45, 500)));
+  expect(value.toUtc(), equals(new DateTime.utc(1932, 2, 24, 1, 53, 45, 500)));
 
   data = <int>[
     199,
@@ -693,7 +693,7 @@ void unpackPastDate() {
     248
   ];
   value = deserialize(data);
-  expect(value.toUtc(), equals(DateTime.utc(1969, 12, 31, 23, 30)));
+  expect(value.toUtc(), equals(new DateTime.utc(1969, 12, 31, 23, 30)));
 }
 
 void unpackCustomExtension() {

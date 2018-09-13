@@ -8,7 +8,7 @@ Uint8Encoder _uInt8Packer;
 /// serializer if one exists in order to limit memory usage.
 Uint8List serialize(dynamic value) {
   if (_uInt8Packer == null) {
-    _uInt8Packer = Uint8Encoder();
+    _uInt8Packer = new Uint8Encoder();
   }
 
   _uInt8Packer.encode(value);
@@ -41,11 +41,11 @@ class Uint8Encoder {
   /// initializing list if the data exceeds the limit of the provided list.
   Uint8Encoder([this._list]) {
     if (_list == null) {
-      _list = Uint8List(_bufferSize);
+      _list = new Uint8List(_bufferSize);
     } else {
       _bufferSize = _list.lengthInBytes;
     }
-    _bd = ByteData.view(_list.buffer);
+    _bd = new ByteData.view(_list.buffer);
   }
 
   /// This method will attempt to detect the appropriate method to pack the
@@ -65,11 +65,11 @@ class Uint8Encoder {
     if (value is Map) return encodeMap(value);
     if (value is ExtensionFormat) return encodeExtension(value);
     if (value is DateTime) {
-      var dateExt = ExtTimeStamp(value);
+      var dateExt = new ExtTimeStamp(value);
       return encodeExtension(dateExt);
     }
 
-    throw ArgumentError('Cannot pack type: ${value.runtimeType}');
+    throw new ArgumentError('Cannot pack type: ${value.runtimeType}');
   }
 
   /// This method will iterate through the values in an [Iterable] and pack
@@ -184,8 +184,8 @@ class Uint8Encoder {
     }
 
     // Doesn't fit, break it up and add pieces;
-    var pieces = Uint8List(sizeNeed);
-    var bd = ByteData.view(pieces.buffer);
+    var pieces = new Uint8List(sizeNeed);
+    var bd = new ByteData.view(pieces.buffer);
     switch (type) {
       case IntType.Uint16:
         bd.setUint16(0, value);
@@ -260,7 +260,7 @@ class Uint8Encoder {
       type = FloatType.Float64;
       val = value;
     } else {
-      throw TypeError();
+      throw new TypeError();
     }
     _checkBuffer();
     _list[_offset++] = type.value;
@@ -284,15 +284,15 @@ class Uint8Encoder {
 
     Uint8List pieces;
     if (type == FloatType.Float32) {
-      pieces = Uint8List(4);
-      var bd = ByteData.view(pieces.buffer);
+      pieces = new Uint8List(4);
+      var bd = new ByteData.view(pieces.buffer);
       bd.setFloat32(_offset, value);
       _packPartial(pieces);
       return;
     }
 
-    pieces = Uint8List(8);
-    var bd = ByteData.view(pieces.buffer);
+    pieces = new Uint8List(8);
+    var bd = new ByteData.view(pieces.buffer);
     bd.setFloat64(_offset, value);
     _packPartial(pieces);
   }
@@ -311,24 +311,24 @@ class Uint8Encoder {
     var size = encoded.lengthInBytes;
     Uint8List pieces;
     if (size < 32) {
-      pieces = Uint8List(size + 1);
+      pieces = new Uint8List(size + 1);
       pieces[0] = StringType.FixStr.value | size;
       pieces.setRange(1, size + 1, encoded);
     } else if (size <= 0xff) {
       // 255: 1 byte size
-      pieces = Uint8List(size + 2);
+      pieces = new Uint8List(size + 2);
       pieces[0] = StringType.Str8.value;
       pieces[1] = size;
       pieces.setRange(2, size + 2, encoded);
     } else if (size <= 0xffff) {
-      pieces = Uint8List(size + 3);
+      pieces = new Uint8List(size + 3);
       pieces[0] = StringType.Str16.value;
       _writeBits(pieces, size, 16, 1);
       pieces.setRange(3, size + 3, encoded);
     } else if (size > 0xffffffff) {
-      throw ArgumentError('String cannot have a length longer than an Uint32');
+      throw new ArgumentError('String cannot have a length longer than an Uint32');
     } else {
-      pieces = Uint8List(size + 5);
+      pieces = new Uint8List(size + 5);
       pieces[0] = StringType.Str32.value;
       _writeBits(pieces, size, 32, 1);
       pieces.setRange(5, size + 5, encoded);
@@ -346,22 +346,22 @@ class Uint8Encoder {
     Uint8List pieces;
     if (len <= 0xff) {
       // 255 - one byte
-      pieces = Uint8List(len + 2);
+      pieces = new Uint8List(len + 2);
       pieces[0] = BinaryType.Bin8.value;
       pieces[1] = len;
       pieces.setRange(
           2, len + 2, data.buffer.asUint8List(data.offsetInBytes, len));
     } else if (len <= 0xffff) {
       // 65535 or two bytes
-      pieces = Uint8List(len + 3);
+      pieces = new Uint8List(len + 3);
       pieces[0] = BinaryType.Bin16.value;
       _writeBits(pieces, len, 16, 1);
       pieces.setRange(
           3, len + 3, data.buffer.asUint8List(data.offsetInBytes, len));
     } else if (len > 0xffffffff) {
-      throw ArgumentError('Binary cannot have a length longer than and Uint32');
+      throw new ArgumentError('Binary cannot have a length longer than and Uint32');
     } else {
-      pieces = Uint8List(len + 5);
+      pieces = new Uint8List(len + 5);
       pieces[0] = BinaryType.Bin32.value;
       _writeBits(pieces, len, 32, 1);
       pieces.setRange(
@@ -391,13 +391,13 @@ class Uint8Encoder {
         _writeBits(_list, len, 16, _offset);
         _offset += 2;
       } else {
-        var pieces = Uint8List(3);
+        var pieces = new Uint8List(3);
         pieces[0] = ArrayType.Array16.value;
         _writeBits(pieces, len, 16, 1);
         _packPartial(pieces);
       }
     } else if (len > 0xffffffff) {
-      throw ArgumentError('Array cannot contain more than Uint32 elements');
+      throw new ArgumentError('Array cannot contain more than Uint32 elements');
     } else {
       var rem = _list.lengthInBytes - _offset;
       if (rem >= 5) {
@@ -405,7 +405,7 @@ class Uint8Encoder {
         _writeBits(_list, len, 32, _offset);
         _offset += 4;
       } else {
-        var pieces = Uint8List(5);
+        var pieces = new Uint8List(5);
         pieces[0] = ArrayType.Array32.value;
         _writeBits(pieces, len, 32, 1);
         _packPartial(pieces);
@@ -439,20 +439,20 @@ class Uint8Encoder {
         _writeBits(_list, len, 16, _offset);
         _offset += 2;
       } else {
-        var pieces = Uint8List(3);
+        var pieces = new Uint8List(3);
         pieces[0] = MapType.Map16.value;
         _writeBits(pieces, len, 16, 1);
         _packPartial(pieces);
       }
     } else if (len > 0xffffffff) {
-      throw ArgumentError('Map cannot contain more than Uint32 elements');
+      throw new ArgumentError('Map cannot contain more than Uint32 elements');
     } else {
       if (rem >= 5) {
         _list[_offset++] = MapType.Map32.value;
         _writeBits(_list, len, 32, _offset);
         _offset += 4;
       } else {
-        var pieces = Uint8List(5);
+        var pieces = new Uint8List(5);
         pieces[0] = MapType.Map32.value;
         _writeBits(pieces, len, 32, 1);
         _packPartial(pieces);
@@ -475,9 +475,9 @@ class Uint8Encoder {
   /// throw a StateError.
   void encodeExtension(ExtensionFormat value) {
     if (!_extCache.containsKey(value.typeId)) {
-      throw StateError('No registered builder for type id: ${value.typeId}');
+      throw new StateError('No registered builder for type id: ${value.typeId}');
     }
-    var packer = Uint8Encoder(Uint8List(256));
+    var packer = new Uint8Encoder(new Uint8List(256));
     value.encode(packer);
 
     var data = packer.done();
@@ -513,7 +513,7 @@ class Uint8Encoder {
     } else if (data.lengthInBytes <= 0xffff) {
       _list[_offset++] = ExtType.Ext16.value;
       if (rem < 3) {
-        var pieces = Uint8List(2);
+        var pieces = new Uint8List(2);
         _writeBits(pieces, data.lengthInBytes, 16, 0);
         _packPartial(pieces);
       } else {
@@ -523,7 +523,7 @@ class Uint8Encoder {
     } else if (data.lengthInBytes <= 0xffffffff) {
       _list[_offset++] = ExtType.Ext32.value;
       if (rem < 5) {
-        var pieces = Uint8List(4);
+        var pieces = new Uint8List(4);
         _writeBits(pieces, data.lengthInBytes, 32, 0);
         _packPartial(pieces);
       } else {
@@ -567,14 +567,14 @@ class Uint8Encoder {
     var out = _collectData();
 
     if (!reuse) {
-      _buffers = List<Uint8List>();
-      _list = Uint8List(_bufferSize);
+      _buffers = new List<Uint8List>();
+      _list = new Uint8List(_bufferSize);
     }
 
     _cachedBytes = 0;
     _curBufId = 0;
     _offset = 0;
-    _bd = ByteData.view(_list.buffer, 0);
+    _bd = new ByteData.view(_list.buffer, 0);
 
     return out;
   }
@@ -584,7 +584,7 @@ class Uint8Encoder {
       return _bd.buffer.asUint8List(0, _offset);
     }
 
-    var out = Uint8List(_cachedBytes + _offset);
+    var out = new Uint8List(_cachedBytes + _offset);
     var ind = 0;
     for (var i = 0; i < _curBufId; i++) {
       var b = _buffers[i];
@@ -609,8 +609,8 @@ class Uint8Encoder {
 
     _cachedBytes += _list.lengthInBytes;
 
-    _list = Uint8List(_bufferSize);
-    _bd = ByteData.view(_list.buffer);
+    _list = new Uint8List(_bufferSize);
+    _bd = new ByteData.view(_list.buffer);
     _curBufId += 1;
     _offset = 0;
   }
