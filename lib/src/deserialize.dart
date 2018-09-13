@@ -109,7 +109,7 @@ class Uint8Decoder {
   ByteData decodeBinary(BinaryType type) {
     int count;
 
-    switch(type) {
+    switch (type) {
       case BinaryType.Bin8:
         count = list[_offset++];
         break;
@@ -239,8 +239,8 @@ class Uint8Decoder {
           break;
       }
     }
-    var unpacker = Uint8Decoder(list.buffer.asUint8List(
-        list.offsetInBytes + _offset, length));
+    var unpacker = Uint8Decoder(
+        list.buffer.asUint8List(list.offsetInBytes + _offset, length));
     var value = builder.decode(unpacker);
     _offset += length;
     return value;
@@ -269,8 +269,8 @@ class Uint8Decoder {
         break;
     }
 
-    String value = const Utf8Decoder().convert(_bd.buffer.asUint8List(
-        list.offsetInBytes + _offset, count));
+    String value = const Utf8Decoder()
+        .convert(_bd.buffer.asUint8List(list.offsetInBytes + _offset, count));
     _offset += count;
     return value;
   }
@@ -333,7 +333,7 @@ class Uint8Decoder {
 
   static int _readBits(Uint8List list, int bits, int ind) {
     var value = 0;
-    for(bits -= 8; bits > 0; bits -= 8) {
+    for (bits -= 8; bits > 0; bits -= 8) {
       value |= list[ind++] << bits;
     }
 
@@ -341,5 +341,4 @@ class Uint8Decoder {
 
     return value;
   }
-
 }

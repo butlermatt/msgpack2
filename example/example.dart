@@ -9,20 +9,15 @@ main() {
   for (var i = 0; i < byteList.lengthInBytes; i++) {
     byteList[i] = random.nextInt(255);
   }
-  var byteData = byteList.buffer.asByteData(
-    byteList.offsetInBytes,
-    byteList.lengthInBytes
-  );
+  var byteData = byteList.buffer
+      .asByteData(byteList.offsetInBytes, byteList.lengthInBytes);
 
   var data = {
     "String": "Hello World",
     "Integer": 42,
     "Double": 45.29,
     "Integer List": [1, 2, 3],
-    "Map": {
-      1: 2,
-      3: 4
-    },
+    "Map": {1: 2, 3: 4},
     "Large Number": 1455232609379,
     "Negative Large Number": -1455232609379,
     "Simple Negative": -59,

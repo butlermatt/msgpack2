@@ -314,7 +314,8 @@ class Uint8Encoder {
       pieces = Uint8List(size + 1);
       pieces[0] = StringType.FixStr.value | size;
       pieces.setRange(1, size + 1, encoded);
-    } else if (size <= 0xff) { // 255: 1 byte size
+    } else if (size <= 0xff) {
+      // 255: 1 byte size
       pieces = Uint8List(size + 2);
       pieces[0] = StringType.Str8.value;
       pieces[1] = size;
@@ -343,26 +344,28 @@ class Uint8Encoder {
     var len = data.lengthInBytes;
 
     Uint8List pieces;
-    if (len <= 0xff) { // 255 - one byte
+    if (len <= 0xff) {
+      // 255 - one byte
       pieces = Uint8List(len + 2);
       pieces[0] = BinaryType.Bin8.value;
       pieces[1] = len;
-      pieces.setRange(2, len + 2,
-          data.buffer.asUint8List(data.offsetInBytes, len));
-    } else if (len <= 0xffff) { // 65535 or two bytes
+      pieces.setRange(
+          2, len + 2, data.buffer.asUint8List(data.offsetInBytes, len));
+    } else if (len <= 0xffff) {
+      // 65535 or two bytes
       pieces = Uint8List(len + 3);
       pieces[0] = BinaryType.Bin16.value;
       _writeBits(pieces, len, 16, 1);
-      pieces.setRange(3, len + 3,
-          data.buffer.asUint8List(data.offsetInBytes, len));
+      pieces.setRange(
+          3, len + 3, data.buffer.asUint8List(data.offsetInBytes, len));
     } else if (len > 0xffffffff) {
       throw ArgumentError('Binary cannot have a length longer than and Uint32');
     } else {
       pieces = Uint8List(len + 5);
       pieces[0] = BinaryType.Bin32.value;
       _writeBits(pieces, len, 32, 1);
-      pieces.setRange(5, len + 5,
-          data.buffer.asUint8List(data.offsetInBytes, len));
+      pieces.setRange(
+          5, len + 5, data.buffer.asUint8List(data.offsetInBytes, len));
     }
 
     _packPartial(pieces);
@@ -535,7 +538,7 @@ class Uint8Encoder {
 
   void _packPartial(Uint8List pieces) {
     var ind = 0;
-    while(ind < pieces.lengthInBytes) {
+    while (ind < pieces.lengthInBytes) {
       var spaceRem = _list.lengthInBytes - _offset;
       var piecesRem = pieces.lengthInBytes - ind;
       var stop = piecesRem > spaceRem ? spaceRem : piecesRem;
@@ -549,7 +552,7 @@ class Uint8Encoder {
   }
 
   static void _writeBits(Uint8List list, int value, int bits, int ind) {
-    for(bits -= 8; bits > 0; bits -= 8) {
+    for (bits -= 8; bits > 0; bits -= 8) {
       list[ind++] = (value >> bits) & 0xff;
     }
 
@@ -583,7 +586,7 @@ class Uint8Encoder {
 
     var out = Uint8List(_cachedBytes + _offset);
     var ind = 0;
-    for(var i = 0; i < _curBufId; i++) {
+    for (var i = 0; i < _curBufId; i++) {
       var b = _buffers[i];
       out.setRange(ind, ind + b.lengthInBytes, b);
       ind += b.lengthInBytes;

@@ -11,8 +11,7 @@ part 'src/extensions.dart';
 
 const int defaultBufferSize = const int.fromEnvironment(
     "msgpack.packer.defaultBufferSize",
-    defaultValue: 2048
-);
+    defaultValue: 2048);
 
 /// A Cache for Common Strings
 class StringCache {

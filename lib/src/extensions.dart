@@ -3,6 +3,7 @@ part of msgpack;
 abstract class ExtensionFormat {
   /// This property is a unique type ID from 0 to 127.
   int get typeId;
+
   /// This method is called when the [ExtensionFormat] sub-type is added to
   /// the Packer. A new [Uint8Encoder] is created and passed to this method
   /// which can be used to pack values, either as simple types or full MsgPack
@@ -12,6 +13,7 @@ abstract class ExtensionFormat {
   /// by the Uint8Packer that receives the ExtensionFormat sub-type. (See:
   /// [Uint8Encoder.encodeExtension]
   void encode(Uint8Encoder encoder);
+
   /// This method is called when the [Uint8Decoder] reads an Extension Format
   /// message with a registered [typeId] for the [ExtensionFormat] sub-type.
   /// A new Uint8Unpacker with only the bytes of this message. The unpacker
@@ -19,7 +21,7 @@ abstract class ExtensionFormat {
   dynamic decode(Uint8Decoder decoder);
 }
 
-Map<int, ExtensionFormat> _extCache = <int,ExtensionFormat>{
+Map<int, ExtensionFormat> _extCache = <int, ExtensionFormat>{
   -1: ExtTimeStamp(null)
 };
 
@@ -30,8 +32,8 @@ Map<int, ExtensionFormat> _extCache = <int,ExtensionFormat>{
 /// Throws a StateError if `obj.typeId` is already registered.
 void registerExtension<T extends ExtensionFormat>(T obj) {
   if (obj.typeId < 0 || obj.typeId > 127) {
-    throw ArgumentError.value(obj.typeId, "typeId",
-        "typeId must be between 0 and 127");
+    throw ArgumentError.value(
+        obj.typeId, "typeId", "typeId must be between 0 and 127");
   }
 
   if (_extCache.containsKey(obj.typeId)) {
@@ -90,7 +92,8 @@ class ExtTimeStamp implements ExtensionFormat {
       var data = decoder.decodeInt(IntType.Uint64);
       nsec = data >> 34;
       sec = data & 0x3ffffffff;
-    } else { // 96 bit signed
+    } else {
+      // 96 bit signed
       nsec = decoder.decodeInt(IntType.Uint32);
       sec = decoder.decodeInt(IntType.Int64);
     }
