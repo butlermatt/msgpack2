@@ -1,4 +1,4 @@
-import 'package:msgpack2/msgpack.dart';
+import 'package:msgpack2/msgpack2.dart';
 
 class Example implements ExtensionFormat {
   final typeId = 1;

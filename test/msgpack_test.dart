@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 import 'package:test/test.dart';
-import 'package:msgpack2/msgpack.dart';
+import 'package:msgpack2/msgpack2.dart';
 
 var isString = predicate((e) => e is String, 'is a String');
 var isInt = predicate((e) => e is int, 'is an int');
