@@ -368,7 +368,7 @@ void packIntToStringMap() {
 
 void packSmallDateTime() {
   // Epoch time because why not? It should be all 0's.
-  var date = ExtTimeStamp(DateTime.fromMillisecondsSinceEpoch(0));
+  var date = ExtTimeStamp(DateTime.fromMillisecondsSinceEpoch(0, isUtc: true));
   List<int> encoded = serialize(date);
   expect(encoded, orderedEquals([0xd7, 0xff, 0, 0, 0, 0, 0, 0, 0, 0]));
   date = ExtTimeStamp(DateTime(2018, 8, 21, 21, 56, 56, 200));
@@ -377,7 +377,7 @@ void packSmallDateTime() {
 }
 
 void packPastDate() {
-  var date = ExtTimeStamp(DateTime(1932, 2, 23, 21, 53, 45, 500));
+  var date = ExtTimeStamp(DateTime.utc(1932, 2, 23, 21, 53, 45, 500));
   List<int> encoded = serialize(date);
   expect(
       encoded,
@@ -395,17 +395,17 @@ void packPastDate() {
         255,
         184,
         204,
-        121,
-        158
+        65,
+        94
       ]));
-  var date2 = DateTime(1969, 12, 31, 19, 30);
+  var date2 = DateTime.utc(1969, 12, 31, 19, 30);
   // Tests "negative near epoch", plus raw date/time rather than wrapping in
   // ExtTimeStamp.
   encoded = serialize(date2);
   expect(
       encoded,
       orderedEquals(
-          [199, 12, 255, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 248, 248]));
+          [199, 12, 255, 0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 192, 184]));
 }
 
 void packCustomExtension() {
@@ -648,7 +648,8 @@ void unpackSmallDateTime() {
   expect(value, equals(DateTime.fromMillisecondsSinceEpoch(0)));
   data = <int>[0xd7, 0xff, 47, 175, 8, 0, 91, 124, 180, 16];
   value = deserialize(data);
-  expect(value, equals(DateTime(2018, 8, 21, 21, 56, 56, 200)));
+  expect((value as DateTime).toUtc(),
+      equals(DateTime.utc(2018, 8, 22, 0, 56, 56, 200)));
 }
 
 void unpackPastDate() {
@@ -670,8 +671,9 @@ void unpackPastDate() {
     158
   ];
 
-  var value = deserialize(data);
-  expect(value, equals(DateTime(1932, 2, 23, 21, 53, 45, 500)));
+  var value = deserialize(data) as DateTime;
+  expect(value.toUtc(), equals(DateTime.utc(1932, 2, 24, 1, 53, 45, 500)));
+
   data = <int>[
     199,
     12,
@@ -690,7 +692,7 @@ void unpackPastDate() {
     248
   ];
   value = deserialize(data);
-  expect(value, equals(DateTime(1969, 12, 31, 19, 30)));
+  expect(value.toUtc(), equals(DateTime.utc(1969, 12, 31, 23, 30)));
 }
 
 void unpackCustomExtension() {
