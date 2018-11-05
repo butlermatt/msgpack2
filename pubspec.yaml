@@ -1,6 +1,9 @@
 name: msgpack2
-description: MsgPack for Dart
-version: 1.0.0
+description: >-
+  MsgPack for Dart. MsgPack is an efficient binary serialization format which allows you to exchange data among
+  multiple languages similar to JSON.
+  This version is compatible with Dart 2.x
+version: 1.0.0+1
 authors:
 - Kenneth Endfinger <kaendfinger@gmail.com>
 - Dan Ellis <dan@danellis.me>
