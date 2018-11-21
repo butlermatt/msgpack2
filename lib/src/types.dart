@@ -67,7 +67,7 @@ class StringType implements MsgType {
   const StringType._(this.value);
 
   factory StringType(int value) {
-    if (value & 0xa0 == 0xa0) return FixStr;
+    if (value & 0xe0 == 0xa0) return FixStr;
     if (value == Str8.value) return Str8;
     if (value == Str16.value) return Str16;
     if (value == Str32.value) return Str32;
@@ -103,7 +103,7 @@ class ArrayType implements MsgType {
   const ArrayType._(this.value);
 
   factory ArrayType(int value) {
-    if (value & FixArray.value == FixArray.value) return FixArray;
+    if (value & 0xf0 == FixArray.value) return FixArray;
     if (value == Array16.value) return Array16;
     if (value == Array32.value) return Array32;
 
@@ -121,7 +121,7 @@ class MapType implements MsgType {
   const MapType._(this.value);
 
   factory MapType(int value) {
-    if (value & FixMap.value == FixMap.value) return FixMap;
+    if (value & 0xf0 == FixMap.value) return FixMap;
     if (value == Map16.value) return Map16;
     if (value == Map32.value) return Map32;
 
