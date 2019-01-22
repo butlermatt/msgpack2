@@ -173,6 +173,55 @@ void main() {
     test("Unpack custom extension", unpackCustomExtension);
     test("Unpack nested custom extension", unpackNestedCustomExtension);
   });
+
+  group("Test Large Array and Map", () {
+    test("Large Array", largeArray);
+    test("Very Large Array", veryLargeArray);
+    test("Large Map", largeMap);
+    test("Very Large Map", veryLargeMap);
+  });
+}
+
+void largeArray() {
+  final list = List<String>();
+  for (int i = 0; i < 16; ++i) {
+    list.add("Item $i");
+  }
+
+  final serialized = serialize(list);
+  List deserialized = deserialize(serialized);
+  expect(deserialized, list);
+}
+
+void veryLargeArray() {
+  final list = List<String>();
+  for (int i = 0; i < 65536; ++i) {
+    list.add("Item $i");
+  }
+
+  final serialized = serialize(list);
+  List deserialized = deserialize(serialized);
+  expect(deserialized, list);
+}
+
+void largeMap() {
+  final map = Map<int, String>();
+  for (int i = 0; i < 16; ++i) {
+    map[i] = "Item $i";
+  }
+  final serialized = serialize(map);
+  Map deserialized = deserialize(serialized);
+  expect(deserialized, map);
+}
+
+void veryLargeMap() {
+  final map = Map<int, String>();
+  for (int i = 0; i < 65536; ++i) {
+    map[i] = "Item $i";
+  }
+  final serialized = serialize(map);
+  Map deserialized = deserialize(serialized);
+  expect(deserialized, map);
 }
 
 // Test packing
